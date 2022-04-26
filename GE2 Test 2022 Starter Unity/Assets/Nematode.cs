@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Nematode : MonoBehaviour
 {
-    public int length = 5;
+    public int higherLimit = 20;
+    public int lowerLimit = 5;
+    
 
     public Material material;
 
     void Awake()
     {
+        int length = Random.Range(lowerLimit, higherLimit);
         int halfwayPoint = length / 2;
         float increaseSizeCounter = 0.2f;
         // Put your code here!
@@ -32,7 +35,19 @@ public class Nematode : MonoBehaviour
             segment.transform.localScale = size;
             segment.GetComponent<Renderer>().material.color = Color.HSVToRGB(Random.Range(0.0f, 1.0f), 1, 1);
             segment.transform.parent = this.transform;
+            if (i == 0)
+            {
+                MakeBoid(segment);
+            }
         }
+    }
+
+    void MakeBoid(GameObject segment)
+    {
+        segment.AddComponent<Boid>();
+        segment.AddComponent<NoiseWander>();
+        segment.AddComponent<ObstacleAvoidance>();
+        segment.AddComponent<Constrain>();
     }
 
 
