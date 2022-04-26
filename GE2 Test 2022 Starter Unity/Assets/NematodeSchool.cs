@@ -28,6 +28,7 @@ public class NematodeSchool : MonoBehaviour
     private void OnEnable()
     {
         StartCoroutine(SpawnMore());
+        //StartCoroutine(CreateNew());
     }
 
     IEnumerator SpawnMore()
@@ -41,6 +42,18 @@ public class NematodeSchool : MonoBehaviour
             yield return new WaitForSeconds(2.0f);
         }
     }
+
+    /*IEnumerator CreateNew()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(10.0f);
+            CreateNematode();
+            yield return new WaitForSeconds(2);
+            
+        }
+        
+    }*/
 
 
     void CreateNematode()

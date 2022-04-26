@@ -11,9 +11,11 @@ public class Nematode : MonoBehaviour
     public GameObject head;
     public Material material;
     public ParticleSystem trail_nema;
+    public int lifespanMin = 10;
 
     void Awake()
     {
+        int lifespan = Random.Range(lifespanMin, lifespanMin * 5);
         int length = Random.Range(lowerLimit, higherLimit);
         int halfwayPoint = length / 2;
         float increaseSizeCounter = 0.2f;
@@ -61,6 +63,7 @@ public class Nematode : MonoBehaviour
             //segment.AddComponent<Rigidbody>();
             //.GetComponent<Rigidbody>().useGravity = false;
             segment.transform.parent = this.transform;
+            
             /*if (!(i + 1 < length))
             {
                 //ParticleSystem trail = segment.AddComponent<ParticleSystem>();
@@ -73,6 +76,7 @@ public class Nematode : MonoBehaviour
             //    MakeBoid(segment);
             //}
         }
+        Invoke("Die",lifespan);
     }
 
     void MakeBoid(GameObject segment)
@@ -81,6 +85,24 @@ public class Nematode : MonoBehaviour
         segment.AddComponent<NoiseWander>();
         segment.AddComponent<ObstacleAvoidance>();
         segment.AddComponent<Constrain>();
+    }
+
+    void Die()
+    {
+        GetComponent<SpineAnimator>().enabled = false;
+        transform.parent = null;
+        foreach (Transform child in transform)
+        {
+            child.transform.parent = null;
+            child.transform.gameObject.AddComponent<Rigidbody>().useGravity = true;
+            child.GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(-3, 3), Random.Range(3, 5), Random.Range(-3, 3)
+            );
+            Destroy(child.transform.gameObject,Random.Range(2,5));
+        }
+
+        gameObject.AddComponent<Rigidbody>().useGravity = true;
+        Destroy(transform.gameObject, Random.Range(2,5));
+        
     }
 
 
